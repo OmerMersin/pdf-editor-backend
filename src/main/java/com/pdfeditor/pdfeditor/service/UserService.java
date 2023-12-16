@@ -6,7 +6,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-import com.pdfeditor.pdfeditor.model.UserModel;
+import com.pdfeditor.pdfeditor.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -14,28 +14,28 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserService {
 
-    public String createUser(UserModel user) throws ExecutionException, InterruptedException {
+    public String createUser(User user) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection("pdf_user").document(user.getId()).set(user);
         return collectionsApiFuture.get().getUpdateTime().toString();
     }
 
-    public UserModel getUser(String id) throws ExecutionException, InterruptedException {
+    public User getUser(String id) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference documentReference = dbFirestore.collection("pdf_user" ).document(id);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        UserModel user;
+        User user;
         if(document.exists()) {
-            user = document.toObject(UserModel.class);
+            user = document.toObject(User.class);
             return user;
         }
         return null;
     }
 
-    public String updateUser(UserModel userModel) throws ExecutionException, InterruptedException {
+    public String updateUser(User user) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection( "pdf_user").document(userModel.getId()).set(userModel);
+        ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection( "pdf_user").document(user.getId()).set(user);
         return collectionsApiFuture.get().getUpdateTime().toString();
     }
 

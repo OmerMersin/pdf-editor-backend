@@ -1,6 +1,6 @@
 package com.pdfeditor.pdfeditor.controller;
 
-import com.pdfeditor.pdfeditor.model.UserModel;
+import com.pdfeditor.pdfeditor.model.User;
 import com.pdfeditor.pdfeditor.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +15,18 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUser(@RequestBody UserModel userModel) throws InterruptedException, ExecutionException {
-        return userService.createUser(userModel);
+    public String createUser(@RequestBody User user) throws InterruptedException, ExecutionException {
+        return userService.createUser(user);
     }
 
     @GetMapping("/get")
-    public UserModel getUser(@RequestParam String id) throws InterruptedException, ExecutionException {
+    public User getUser(@RequestParam String id) throws InterruptedException, ExecutionException {
         return userService.getUser(id);
     }
 
     @PutMapping("/update")
-    public String getUser(@RequestBody UserModel userModel) throws InterruptedException, ExecutionException {
-        return userService.updateUser(userModel);
+    public String getUser(@RequestBody User user) throws InterruptedException, ExecutionException {
+        return userService.updateUser(user);
     }
 
     @DeleteMapping("/delete")
