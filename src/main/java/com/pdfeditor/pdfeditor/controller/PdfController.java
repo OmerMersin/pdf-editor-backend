@@ -28,6 +28,14 @@ public class PdfController {
         return pdfService.uploadPdf(fileName, file.getBytes());
     }
 
+    @PostMapping("/uploadPdfUser/{user}")
+    public String uploadPdfUser(
+            @RequestParam("fileName") String fileName,
+            @RequestPart("file") MultipartFile file,
+            @PathVariable("user") String User) throws IOException, ExecutionException, InterruptedException {
+        return pdfService.uploadPdfUser(fileName, file.getBytes(), User);
+    }
+
 
     @GetMapping("/downloadPdf/{fileName}")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable("fileName") String fileName) throws IOException {
@@ -101,4 +109,10 @@ public class PdfController {
         }
     }
 
+
+    @PostMapping("/createFolder/{folderName}")
+    @CrossOrigin(origins = "http://127.0.0.1:5501")
+    public String createFolder(@PathVariable("folderName") String folderName) {
+        return pdfService.createFolder(folderName);
+    }
 }

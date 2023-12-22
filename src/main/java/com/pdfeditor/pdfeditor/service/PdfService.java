@@ -197,4 +197,46 @@ public class PdfService {
             // Handle the exception appropriately based on your application's error handling strategy
         }
     }
+
+    public String createFolder(String folderName) {
+        try {
+            Storage storage = StorageOptions.newBuilder()
+                    .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream("src/main/resources/serviceAccountKey.json")))
+                    .build()
+                    .getService();
+
+            // Specify the bucket name
+            String bucketName = "pdf-editor-5f9cc.appspot.com";
+
+            // Specify the folder name (object name)
+            String folderObjectName = folderName + "/"; // Ending with a forward slash to represent a folder
+
+            // Create a new blob (folder) in the specified bucket
+            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, folderObjectName).build();
+            storage.create(blobInfo);
+
+            return "Folder created successfully: " + folderName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error creating folder: " + e.getMessage();
+        }
+    }
+
+    public String uploadPdfUser(String fileName, byte[] content, String User) throws IOException {
+        Storage storage = StorageOptions.newBuilder()
+                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream("src/main/resources/serviceAccountKey.json")))
+                .build()
+                .getService();
+
+        // Read PDF file
+//        Path path = Paths.get("/Users/omermersin/Developer/final/pdf-js/pdf/sa.pdf");
+//        byte[] fileContent = Files.readAllBytes(path);
+
+        // Upload PDF to Firebase Storage
+        BlobId blobId = BlobId.of("pdf-editor-5f9cc.appspot.com", User + "/" + fileName + ".pdf");
+        Blob blob = storage.create(BlobInfo.newBuilder(blobId).build(), content);
+
+        System.out.println("File uploaded to: " + blob.getMediaLink());
+        return "Successfully uploaded " + fileName;
+    }
 }
